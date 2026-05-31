@@ -25,6 +25,7 @@ public struct Role: Codable, Sendable, Equatable, CustomStringConvertible {
     private enum RoleType: Codable, Sendable, Equatable {
         case user
         case assistant
+        case system
     }
 
     private let type: RoleType
@@ -33,6 +34,7 @@ public struct Role: Codable, Sendable, Equatable, CustomStringConvertible {
         switch sdkConversationRole {
         case .user: self.type = .user
         case .assistant: self.type = .assistant
+        case .system: self.type = .system
         case .sdkUnknown(let unknownRole):
             throw BedrockLibraryError.notImplemented(
                 "Role \(unknownRole) is not implemented by BedrockRuntimeClientTypes"
@@ -44,6 +46,7 @@ public struct Role: Codable, Sendable, Equatable, CustomStringConvertible {
         switch self.type {
         case .user: return .user
         case .assistant: return .assistant
+        case .system: return .system
         }
     }
 
@@ -62,6 +65,7 @@ public struct Role: Codable, Sendable, Equatable, CustomStringConvertible {
         switch role {
         case "user": self.type = .user
         case "assistant": self.type = .assistant
+        case "system": self.type = .system
         default:
             throw BedrockLibraryError.decodingError(
                 "Role \(role) is not a valid role"
@@ -73,6 +77,7 @@ public struct Role: Codable, Sendable, Equatable, CustomStringConvertible {
         switch self.type {
         case .user: try container.encode("user")
         case .assistant: try container.encode("assistant")
+        case .system: try container.encode("system")
         }
     }
     /// Returns the type of the role as a string.
@@ -80,6 +85,7 @@ public struct Role: Codable, Sendable, Equatable, CustomStringConvertible {
         switch self.type {
         case .user: return "user"
         case .assistant: return "assistant"
+        case .system: return "system"
         }
     }
 
@@ -94,4 +100,5 @@ public struct Role: Codable, Sendable, Equatable, CustomStringConvertible {
     }
     public static let user = Role(.user)
     public static let assistant = Role(.assistant)
+    public static let system = Role(.system)
 }
